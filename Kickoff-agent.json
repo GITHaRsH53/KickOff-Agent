@@ -1,0 +1,597 @@
+{
+  "name": "Football Travel agent workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "27765ae5-ce18-45ee-a53a-e014fd955c9b",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -576,
+        -16
+      ],
+      "id": "1b3a655a-b88e-4466-90bd-95dec3ec5191",
+      "name": "Webhook",
+      "webhookId": "27765ae5-ce18-45ee-a53a-e014fd955c9b"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "326eecfe-a820-4306-a42d-68aa028f65c5",
+              "name": "name",
+              "value": "={{ $json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "973b0082-a53f-47e2-b86a-1d6fd06d0f9d",
+              "name": "reasonoftravel",
+              "value": "={{ $json.body.reasonoftravel }}",
+              "type": "string"
+            },
+            {
+              "id": "24175c19-6498-4cda-9411-5ddf8608ee54",
+              "name": "currentlocation",
+              "value": "={{ $json.body.currentlocation }}",
+              "type": "string"
+            },
+            {
+              "id": "d1a000bb-98e2-42f8-8cab-d02f7ab9a1ec",
+              "name": "destination",
+              "value": "={{ $json.body.destination }}",
+              "type": "string"
+            },
+            {
+              "id": "b768e095-070e-45ad-a1b9-c989560dc835",
+              "name": "departuredate",
+              "value": "={{ $json.body.departuredate }}",
+              "type": "string"
+            },
+            {
+              "id": "78baaab5-f803-4ea5-b40e-bf4f3b36e720",
+              "name": "returndate",
+              "value": "={{ $json.body.returndate }}",
+              "type": "string"
+            },
+            {
+              "id": "dd46bfa2-e30c-4d37-b633-5e0b81d6493d",
+              "name": "activities",
+              "value": "={{ $json.body.activities }}",
+              "type": "string"
+            },
+            {
+              "id": "da71b2ad-c8ee-4d20-a18f-84096d5d2315",
+              "name": "outputtype",
+              "value": "={{ $json.body.outputtype }}",
+              "type": "string"
+            },
+            {
+              "id": "504f2604-2a26-4c3e-8255-130ff02f932e",
+              "name": "email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "1706d92e-8a15-4671-a4b1-cbb0292914fc",
+              "name": "other",
+              "value": "={{ $json.body.other }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -368,
+        -16
+      ],
+      "id": "5970c027-7fd1-4bf7-8837-ad1300962032",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={\n\"Current Location\": \"{{$json.currentlocation  }}\n\"Destination\": \"{{ $json.destination }}\",\n\"Departure\": \"{{ $json.departuredate}}\",\n\"Return\": \"{{ $json.returndate }}\"\n}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Turn the origin and destination into the ir airport codes. Make sure the departure and return dates are in the future, not the past. Here is the current date/time: {{ $now }}"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -160,
+        -16
+      ],
+      "id": "0f928c78-572a-442a-a11d-d20601f6894a",
+      "name": "Airport Codes & Dates"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        192
+      ],
+      "id": "39b036e6-e68b-42d4-93e9-0adc48ec56c5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "aSqPAy7ospEkBj0W",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "={\n  \"type\": \"object\",\n  \"properties\": {\n    \"origin_airport_code\": {\n      \"type\": \"string\",\n      \"description\": \"IATA code for the origin city or airport (e.g., DEL for Delhi).\"\n    },\n    \"destination_airport_code\": {\n      \"type\": \"string\",\n      \"description\": \"IATA code for the destination city or airport (e.g., MAD for Madrid).\"\n    },\n    \"departure_date\": {\n      \"type\": \"string\",\n      \"description\": \"Departure date in YYYY-MM-DD format.\"\n    },\n    \"return_date\": {\n      \"type\": \"string\",\n      \"description\": \"Return date in YYYY-MM-DD format.\"\n    }\n  },\n  \"required\": [\n    \"origin_airport_code\",\n    \"destination_airport_code\",\n    \"departure_date\",\n    \"return_date\"\n  ]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        176
+      ],
+      "id": "add5c8b3-856e-4ab6-9b2b-58c875253251",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"engine\": \"google_flights\",\n  \"departure_id\": \"{{ $json.output.origin_airport_code }}\",\n  \"arrival_id\": \"{{ $json.output.destination_airport_code }}\",\n  \"outbound_date\": \"{{$json.output.departure_date}}\",\n  \"return_date\": \"{{ $json.output.return_date}}\",\n  \"max_results\": 3,\n  \"adults\": 1,\n  \"api_key\": \"833a09a52681e061b7dde85b2a8c71b63e07c5cb83551f245d7aeebcbb2a77c1\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        192,
+        -16
+      ],
+      "id": "608fb080-ca8f-4a7b-a543-5ac613e64262",
+      "name": "Flight",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ijhUMuDwjtqhLXV2",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "engine",
+              "value": "google_hotels"
+            },
+            {
+              "name": "Content_Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"q\": \"{{ $('Webhook').item.json.body.destination }} hotels\",\n  \"check_in_date\": \"{{ $('Webhook').item.json.body.departuredate }}\",\n  \"check_out_date\": \"{{ $('Webhook').item.json.body.returndate }}\",\n  \"max_results\": 3,\n  \"adults\": 1,\n  \"currency\": \"USD\",\n  \"gl\": \"us\",\n  \"hl\": \"en\",\n  \"api_key\": \"833a09a52681e061b7dde85b2a8c71b63e07c5cb83551f245d7aeebcbb2a77c1\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        400,
+        -16
+      ],
+      "id": "8fb4d0df-357a-4bfd-8228-e67e50bc654e",
+      "name": "Hotel",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "O17ss9m213kan501",
+          "name": "Query Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query\": \"{{ $('Webhook').item.json.body.activities }} in {{ $('Webhook').item.json.body.destination }}\",\n  \"search_depth\": \"advanced\",\n  \"include_images\": true\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        608,
+        -16
+      ],
+      "id": "5807c7cf-33bb-4a2d-af5f-8fcad4c78964",
+      "name": "Activities",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "BakWefrhyTmVw7hN",
+          "name": "Header Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "engine",
+              "value": "youtube"
+            },
+            {
+              "name": "search_query",
+              "value": "={{ $('Webhook').item.json.body.destination }} Tour"
+            },
+            {
+              "name": "api_key",
+              "value": "833a09a52681e061b7dde85b2a8c71b63e07c5cb83551f245d7aeebcbb2a77c1"
+            },
+            {
+              "name": "hi",
+              "value": "en"
+            },
+            {
+              "name": "sp",
+              "value": "CAI%3D"
+            },
+            {
+              "name": "limit",
+              "value": "3"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        816,
+        -16
+      ],
+      "id": "990d985d-ec4b-4383-9aa4-a8aef2e01bd4",
+      "name": "Youtube"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=This person is traveling to \"{{ $('Webhook').item.json.body.destination }}\" \nfrom \"{{ $('Webhook').item.json.body.currentlocation }}\" \nduring these dates: \"{{ $('Webhook').item.json.body.departuredate }}\" \nuntil \"{{ $('Webhook').item.json.body.returndate }}\".\n\nThey are going for a \"{{ $('Webhook').item.json.body.reasonoftravel }}\" trip.\n\nYour task is to act as a professional AI travel consultant.\n\nProvide:\n1. Visa requirements based on the traveler's origin and destination.\n   - Specifically mention if a 30-day visa-free or Schengen-area stay applies.\n   - Highlight any exceptions, online visa procedures, or entry-permit conditions.\n2. Currency and payment tips (exchange rate, card acceptance, cash advice).\n3. Cultural and safety insights relevant to European or nearby countries.\n4. Health, connectivity, and emergency contact essentials.\n5. If the trip duration is within 30 days and the destination is in Europe, \n   mention whether the traveler likely doesn’t need to apply for a visa.\n6. Keep your tone warm, informative, and structured — respond as a local travel expert.\n\nReturn your response as a clear, multi-section travel guide.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        992,
+        -16
+      ],
+      "id": "fccdee33-afa9-42f2-b2c7-6f0bc75fe604",
+      "name": "Travel Advice Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        912,
+        192
+      ],
+      "id": "71088f4d-a3c1-4166-98d1-85e8ce0fb9f4",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "aSqPAy7ospEkBj0W",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        624
+      ],
+      "id": "0e5dc92c-370d-4206-bec3-c528743bb1dd",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "aSqPAy7ospEkBj0W",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={\n  \"travel_plan\": {\n    \"overview\": {\n      \"traveler_name\": \"{{ $node['Webhook'].json.body.name }}\",\n      \"departure_location\": \"{{ $node['Webhook'].json.body.currentlocation }}\",\n      \"destination\": \"{{ $node['Webhook'].json.body.destination }}\",\n      \"travel_dates\": \"{{ $node['Webhook'].json.body.departuredate }} - {{ $node['Webhook'].json.body.returndate }}\",\n      \"reason_of_travel\": \"{{ $node['Webhook'].json.body.reasonoftravel }}\"\n    },\n\n    \"pre_travel_requirements\": {\n      \"visa_and_passport\": \"{{ $node['Travel Advice Agent'].json.output }}\"\n    },\n\n    \"flights\": {\n      \"items\": \"{{ JSON.stringify([$(\n        'Flight'\n      ).item.json.best_flights?.[0], $('Flight').item.json.best_flights?.[1]]\n        .filter(f => !!f)\n        .map(f => ({\n          main_legs: f.flights || [],\n          layovers: f.layovers || [],\n          lowest_price: $('Flight').item.json.price_insights?.lowest_price ?? null,\n          departure_airport: $('Flight').item.json.airports?.departure?.[0]?.airport?.name ?? '',\n          arrival_airport: $('Flight').item.json.airports?.arrival?.[0]?.airport?.name ?? ''\n        }))\n      ) }}\"\n    },\n\n    \"hotels\": {\n      \"items\": \"{{ JSON.stringify([0,1].map(i => { const p = $('Hotel').item.json.properties?.[i]; return p ? ({\n          name: p.name || '',\n          rating: p.overall_rating ?? null,\n          price_per_night: p.rate_per_night?.lowest || '',\n          total_price: p.total_rate?.lowest || '',\n          link: p.link || '',\n          image: p.images?.[0]?.thumbnail || ''\n        }) : null; }).filter(Boolean)) }}\"\n    },\n\n    \"activities\": {\n      \"top_results\": \"{{ JSON.stringify(($('Activities').item.json.results || []).slice(0,3).map(r => ({ title: r.title, url: r.url })) ) }}\",\n      \"images\": \"{{ JSON.stringify(($('Activities').item.json.images || []).slice(0,3)) }}\"\n    },\n\n    \"videos\": {\n      \"youtube_top3\": \"{{ JSON.stringify(($('Youtube').item.json.video_results || []).slice(0,3).map(v => ({ title: v.title, link: v.link }))) }}\",\n      \"shorts_top3\": \"{{ JSON.stringify(($('Youtube').item.json.shorts_results || []).slice(0,3).map(v => ({ title: v.title, link: v.link }))) }}\"\n    }\n  }\n}\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Updated prompt (paste this)\n\nYou are an expert travel itinerary email creator.\n\nYour goal: generate a short, professional HTML email summarizing a user’s trip plan from structured JSON data.\n\nReturn your response as JSON:\n{\n\"subject\": \"...\",\n\"emailBody\": \"<html>...</html>\"\n}\n\nRules & Style\n\nKeep it concise, bullet-pointed, and mobile-friendly.\n\nSections to include (only if data exists): Overview, ✈️ Flights, 🏨 Hotels, 🎟️ Activities, 🪪 Visa Info.\n\nSpacing: add clear vertical space between sections (use margins/padding; no giant images).\n\nLists: present all items as bullet points (no tables). 1–2 lines per bullet.\n\nLinks: <a href=\"...\" target=\"_blank\" rel=\"noopener\"> and keep link text short (“View details”, “Ticket info”).\n\nImages: small rounded thumbnails only when helpful, width ≈ 160px.\n\nSkip empty sections entirely.\n\nTone: friendly, concise, informative.\n\nInputs (examples / paths)\n\nFlights\n\nflights.items → JSON string of 1–2 objects:\n\nmain_legs[], layovers[], lowest_price, departure_airport, arrival_airport\n\nParse and list each flight like:\n\nAirline • ORG → DST (times) • via LAYOVER(S) • from PRICE\n\nHotels\n\nhotels.items → JSON string of 1–2 objects:\n\nname, rating, price_per_night, total_price, link, image\n\nBullet per hotel: Name — rating ★ • price/night • Total: X • [View details]\n\nActivities\n\nactivities.top_results → JSON string of up to 3: {title, url}\n\nactivities.images → JSON string of up to 3 image URLs (optional thumbnails, small)\n\nVisa / Advice\n\npre_travel_requirements.visa_and_passport → plain text. Convert to 3–6 short bullets (strip headings/markdown).\n\nOutput structure (HTML guidance)\n\nUse a single centered container <div style=\"max-width:600px;margin:0 auto;padding:16px;font:14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial;\">.\n\nSection title style: margin:20px 0 8px;font-weight:700;\n\nBulleted list style: <ul style=\"margin:0 0 12px 20px;padding:0;\"> ... </ul>\n\nThumbnail style: width:160px;border-radius:8px;margin:6px 0;display:block;\n\nOptional (only if you explicitly decide to show videos)\n\nIf videos.youtube_top3 is present and you choose to include, show as bulleted text links only (no thumbnails) to minimize mail-client previews."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -336,
+        400
+      ],
+      "id": "e937879d-0eba-4734-94a0-b3097597aadd",
+      "name": "Email Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get raw text output from Email Agent\nconst rawOutput = $input.all()[0].json.output;\n\n// Try to detect if it's a JSON string wrapped in backticks\nlet parsed;\ntry {\n  // Clean up markdown formatting\n  const clean = rawOutput.replace(/```json|```/g, '').trim();\n  parsed = JSON.parse(clean);\n} catch (e) {\n  parsed = null;\n}\n\n// If parsing worked, take the subject from the JSON\nconst subject = parsed?.subject || \"Your Upcoming Travel Plan\";\n\nreturn [{ subject }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        400
+      ],
+      "id": "88abf286-0dc4-4cac-ab64-b1cb10b3c7ce",
+      "name": "Subjectline"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the raw Email Agent output\nconst rawOutput = $('Email Agent').first().json.output || '';\n\n// If output is markdown-wrapped JSON, remove wrappers\nlet clean = rawOutput.replace(/```json|```/g, '').trim();\n\nlet emailBody = '';\ntry {\n  // Try parsing it as JSON to extract the email body field\n  const parsed = JSON.parse(clean);\n  emailBody = parsed.emailBody || '';\n} catch (e) {\n  // Fallback: remove the subject line manually if JSON parse fails\n  emailBody = clean\n    .split('\\n')\n    .filter(line => !line.startsWith('Subject:'))\n    .join('\\n');\n}\n\n// Add your custom signature at the end of the email\nemailBody += `\n  <br><br>\n  <p>We hope you have an incredible time on your trip! Let us know if you have any questions.</p>\n  <p>Best regards,<br><strong>HT Travel Team</strong></p>\n`;\n\n// Return the email body as the result\nreturn [{ emailBody }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        400
+      ],
+      "id": "63a1a297-1d37-4077-a495-66cd66b82212",
+      "name": "Body"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "={{ $('Subjectline').item.json.subject }}",
+        "message": "={{ $json.emailBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        400
+      ],
+      "id": "35cbb9b9-58e8-4d98-82eb-aae45a7f2ea0",
+      "name": "Send a message",
+      "webhookId": "fda824e2-bdc4-4857-88aa-42cc020bd2d9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "xjXshSALYmcG68c2",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Airport Codes & Dates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Airport Codes & Dates",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Airport Codes & Dates",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airport Codes & Dates": {
+      "main": [
+        [
+          {
+            "node": "Flight",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flight": {
+      "main": [
+        [
+          {
+            "node": "Hotel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hotel": {
+      "main": [
+        [
+          {
+            "node": "Activities",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Activities": {
+      "main": [
+        [
+          {
+            "node": "Youtube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Youtube": {
+      "main": [
+        [
+          {
+            "node": "Travel Advice Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Travel Advice Agent": {
+      "main": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Travel Advice Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Agent": {
+      "main": [
+        [
+          {
+            "node": "Subjectline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Subjectline": {
+      "main": [
+        [
+          {
+            "node": "Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Body": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2c4f54c8-c2d7-46c3-b94d-dfb68fd61816",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3a79da7f13c40c0e28cc315381a08428b31879ba1da568c5f45e49564a1c8754"
+  },
+  "id": "FDcjfnQypN9YoWs0",
+  "tags": []
+}
