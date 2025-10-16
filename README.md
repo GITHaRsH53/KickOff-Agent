@@ -37,11 +37,11 @@ It helps football fans plan trips for **UCL and La Liga matches**, automating fl
 ## 🚀 Getting Started  
 
 ### 1️⃣ Clone the Repository  
-```bash
+<!-- ```bash -->
 git clone https://github.com/yourusername/KickOff-Agent.git
 cd KickOff-Agent
 
-2️⃣ Import Workflow into n8n
+### 2️⃣ Import Workflow into n8n
 
 Open your n8n instance
 
@@ -49,7 +49,7 @@ Go to Workflows → Import
 
 Upload the file KickOff_Agent_Workflow.json
 
-3️⃣ Configure API Keys 🔑
+### 3️⃣ Configure API Keys 🔑
 
 Set the following credentials in n8n → Credentials:
 
@@ -61,7 +61,7 @@ Gemini API → For text generation and summarization
 
 SerpAPI / Tavily → For fetching flights, hotels, and activities
 
-4️⃣ Run the Workflow 🎯
+### 4️⃣ Run the Workflow 🎯
 
 Start your n8n instance
 
