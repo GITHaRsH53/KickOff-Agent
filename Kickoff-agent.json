@@ -1,5 +1,5 @@
 {
-  "name": "Football Travel agent workflow",
+  "name": "Kickoff-Agent",
   "nodes": [
     {
       "parameters": {
@@ -265,7 +265,7 @@
             },
             {
               "name": "api_key",
-              "value": "833a09a52681e061b7dde85b2a8c71b63e07c5cb83551f245d7aeebcbb2a77c1"
+              "value": "*********************************************" 
             },
             {
               "name": "hi",
@@ -587,7 +587,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "2c4f54c8-c2d7-46c3-b94d-dfb68fd61816",
+  "versionId": "afa909fa-e98c-490b-a249-4b64b1993991",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3a79da7f13c40c0e28cc315381a08428b31879ba1da568c5f45e49564a1c8754"

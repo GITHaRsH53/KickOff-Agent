@@ -71,7 +71,7 @@ Speak or input trip details (e.g., “Plan my Madrid trip for El Clásico 2025�
 
 Receive your personalized football travel itinerary in your Gmail inbox 🚀
 
-💡 How It Works
+### 💡 How It Works
 
 🎤 User Interaction — You talk to the ElevenLabs voice companion
 
@@ -82,11 +82,3 @@ Receive your personalized football travel itinerary in your Gmail inbox 🚀
 🪪 Advice Agent — Adds visa, currency, and safety recommendations
 
 📧 Email Agent — Generates and sends a formatted HTML travel plan
-
-flowchart TD
-A[🎤 ElevenLabs Voice Input] --> B[🌐 Webhook Trigger in n8n]
-B --> C[🧠 Gemini Model → Extracts & Summarizes]
-C --> D[🔎 API Calls → Flights, Hotels, Activities]
-D --> E[🪪 Travel Advice Agent]
-E --> F[💌 Email Agent → HTML Itinerary]
-F --> G[📧 Gmail → Sends to User]
