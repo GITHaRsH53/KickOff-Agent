@@ -38,7 +38,7 @@ It helps football fans plan trips for **UCL and La Liga matches**, automating fl
 
 ### 1️⃣ Clone the Repository  
 <!-- ```bash -->
-git clone https://github.com/yourusername/KickOff-Agent.git
+git clone https://github.com/GITHaRsH53/KickOff-Agent.git
 cd KickOff-Agent
 
 ### 2️⃣ Import Workflow into n8n
