@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "origin_airport_code": {
+      "type": "string",
+      "description": "IATA code for the origin city or airport (e.g., DEL for Delhi)."
+    },
+    "destination_airport_code": {
+      "type": "string",
+      "description": "IATA code for the destination city or airport (e.g., MAD for Madrid)."
+    },
+    "departure_date": {
+      "type": "string",
+      "description": "Departure date in YYYY-MM-DD format."
+    },
+    "return_date": {
+      "type": "string",
+      "description": "Return date in YYYY-MM-DD format."
+    }
+  },
+  "required": [
+    "origin_airport_code",
+    "destination_airport_code",
+    "departure_date",
+    "return_date"
+  ]
+}

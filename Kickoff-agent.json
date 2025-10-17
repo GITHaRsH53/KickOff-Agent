@@ -97,7 +97,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={\n\"Current Location\": \"{{$json.currentlocation  }}\n\"Destination\": \"{{ $json.destination }}\",\n\"Departure\": \"{{ $json.departuredate}}\",\n\"Return\": \"{{ $json.returndate }}\"\n}",
+        "text": "={\n\"Current Location\": \"{{$json.currentlocation  }}\",\n\"Destination\": \"{{ $json.destination }}\",\n\"Departure\": \"{{ $json.departuredate}}\",\n\"Return\": \"{{ $json.returndate }}\"\n}",
         "hasOutputParser": true,
         "messages": {
           "messageValues": [
@@ -265,7 +265,7 @@
             },
             {
               "name": "api_key",
-              "value": "*********************************************" 
+              "value": "********************************************"
             },
             {
               "name": "hi",
@@ -587,7 +587,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "afa909fa-e98c-490b-a249-4b64b1993991",
+  "versionId": "34373c2c-0580-439b-b249-11d202fca425",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3a79da7f13c40c0e28cc315381a08428b31879ba1da568c5f45e49564a1c8754"

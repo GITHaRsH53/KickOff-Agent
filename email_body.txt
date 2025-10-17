@@ -1,0 +1,28 @@
+// Get the raw Email Agent output
+const rawOutput = $('Email Agent').first().json.output || '';
+
+// If output is markdown-wrapped JSON, remove wrappers
+let clean = rawOutput.replace(/```json|```/g, '').trim();
+
+let emailBody = '';
+try {
+  // Try parsing it as JSON to extract the email body field
+  const parsed = JSON.parse(clean);
+  emailBody = parsed.emailBody || '';
+} catch (e) {
+  // Fallback: remove the subject line manually if JSON parse fails
+  emailBody = clean
+    .split('\n')
+    .filter(line => !line.startsWith('Subject:'))
+    .join('\n');
+}
+
+// Add your custom signature at the end of the email
+emailBody += `
+  <br><br>
+  <p>We hope you have an incredible time on your trip! Let us know if you have any questions.</p>
+  <p>Best regards,<br><strong>HT Travel Team</strong></p>
+`;
+
+// Return the email body as the result
+return [{ emailBody }];

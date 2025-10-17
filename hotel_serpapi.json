@@ -1,0 +1,11 @@
+{
+  "q": "{{ $('Webhook').item.json.body.destination }} hotels",
+  "check_in_date": "{{ $('Webhook').item.json.body.departuredate }}",
+  "check_out_date": "{{ $('Webhook').item.json.body.returndate }}",
+  "max_results": 3,
+  "adults": 1,
+  "currency": "USD",
+  "gl": "us",
+  "hl": "en",
+  "api_key": "833a09a52681e061b7dde85b2a8c71b63e07c5cb83551f245d7aeebcbb2a77c1"
+}

@@ -1,0 +1,5 @@
+{
+  "query": "{{ $('Webhook').item.json.body.activities }} in {{ $('Webhook').item.json.body.destination }}",
+  "search_depth": "advanced",
+  "include_images": true
+}

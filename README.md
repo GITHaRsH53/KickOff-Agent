@@ -6,8 +6,13 @@ It helps football fans plan trips for **UCL and La Liga matches**, automating fl
 
 ---
 
-## 🎥 Demo  
-📹 `n8n.Kickoff.Agent.mp4`
+## 🎥 Demo
+
+<video width="640" controls>
+  <source src="https://github.com/GITHaRsH53/KickOff-Agent.git/raw/master/demo/Kickoff_Agent.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 
 ---
 

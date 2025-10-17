@@ -1,0 +1,10 @@
+{
+  "engine": "google_flights",
+  "departure_id": "{{ $json.output.origin_airport_code }}",
+  "arrival_id": "{{ $json.output.destination_airport_code }}",
+  "outbound_date": "{{$json.output.departure_date}}",
+  "return_date": "{{ $json.output.return_date}}",
+  "max_results": 3,
+  "adults": 1,
+  "api_key": "**************************************"
+} 

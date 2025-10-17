@@ -1,0 +1,13 @@
+{
+  "type": "system",
+  "name": "end_call",
+  "description": "",
+  "response_timeout_secs": 20,
+  "disable_interruptions": false,
+  "force_pre_tool_speech": false,
+  "assignments": [],
+  "params": {
+    "system_tool_type": "end_call",
+    "transfers": []
+  }
+}

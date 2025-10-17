@@ -1,0 +1,136 @@
+{
+  "type": "webhook",
+  "name": "n8n",
+  "description": "This tool generates a travel plan once you have collected all of the details requested.",
+  "disable_interruptions": false,
+  "force_pre_tool_speech": "auto",
+  "assignments": [],
+  "execution_mode": "immediate",
+  "api_schema": {
+    "url": "https://urdayai.app.n8n.cloud/webhook-test/27765ae5-ce18-45ee-a53a-e014fd955c9b",
+    "method": "POST",
+    "path_params_schema": [],
+    "query_params_schema": [],
+    "request_body_schema": {
+      "id": "body",
+      "type": "object",
+      "description": "Collect all the details of the caller and send the request to the webhook of n8n.",
+      "properties": [
+        {
+          "id": "currentlocation",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "where the current caller is located. Wait for reply before\nasking another question.",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "required": false
+        },
+        {
+          "id": "outputtype",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "does the caller want to receive the travel plan by email,\nwhatsapp or both?",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "required": true
+        },
+        {
+          "id": "activities",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "what kind of activities the caller wants to do there. Wait\nfor reply before asking another question.",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "required": true
+        },
+        {
+          "id": "returndate",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "when does the caller want to return. Wait for reply before\nasking another question. ",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "required": true
+        },
+        {
+          "id": "other",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "add any other details the caller has said that could be\nimportant.",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "required": true
+        },
+        {
+          "id": "destination",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "the destination of the caller. Wait for reply before asking\nanother question.",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "required": true
+        },
+        {
+          "id": "reasonoftravel",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "the reason for the callers travel. Wait for reply before\nasking another question.",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "required": true
+        },
+        {
+          "id": "email",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "email of the caller",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "required": true
+        },
+        {
+          "id": "departuredate",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "when the caller wants to travel. Wait for reply before\nasking another question.",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "required": true
+        },
+        {
+          "id": "name",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "name of caller. Wait for reply before asking another\nquestion.",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "required": true
+        }
+      ],
+      "required": false,
+      "value_type": "llm_prompt"
+    },
+    "request_headers": [
+      {
+        "type": "value",
+        "name": "Content-Type",
+        "value": "application/json"
+      }
+    ],
+    "auth_connection": null
+  },
+  "response_timeout_secs": 20,
+  "dynamic_variables": {
+    "dynamic_variable_placeholders": {}
+  }
+}

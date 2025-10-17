@@ -1,0 +1,17 @@
+// Get raw text output from Email Agent
+const rawOutput = $input.all()[0].json.output;
+
+// Try to detect if it's a JSON string wrapped in backticks
+let parsed;
+try {
+  // Clean up markdown formatting
+  const clean = rawOutput.replace(/```json|```/g, '').trim();
+  parsed = JSON.parse(clean);
+} catch (e) {
+  parsed = null;
+}
+
+// If parsing worked, take the subject from the JSON
+const subject = parsed?.subject || "Your Upcoming Travel Plan";
+
+return [{ subject }];

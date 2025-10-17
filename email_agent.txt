@@ -1,0 +1,51 @@
+{
+  "travel_plan": {
+    "overview": {
+      "traveler_name": "{{ $node['Webhook'].json.body.name }}",
+      "departure_location": "{{ $node['Webhook'].json.body.currentlocation }}",
+      "destination": "{{ $node['Webhook'].json.body.destination }}",
+      "travel_dates": "{{ $node['Webhook'].json.body.departuredate }} - {{ $node['Webhook'].json.body.returndate }}",
+      "reason_of_travel": "{{ $node['Webhook'].json.body.reasonoftravel }}"
+    },
+
+    "pre_travel_requirements": {
+      "visa_and_passport": "{{ $node['Travel Advice Agent'].json.output }}"
+    },
+
+    "flights": {
+      "items": "{{ JSON.stringify([$(
+        'Flight'
+      ).item.json.best_flights?.[0], $('Flight').item.json.best_flights?.[1]]
+        .filter(f => !!f)
+        .map(f => ({
+          main_legs: f.flights || [],
+          layovers: f.layovers || [],
+          lowest_price: $('Flight').item.json.price_insights?.lowest_price ?? null,
+          departure_airport: $('Flight').item.json.airports?.departure?.[0]?.airport?.name ?? '',
+          arrival_airport: $('Flight').item.json.airports?.arrival?.[0]?.airport?.name ?? ''
+        }))
+      ) }}"
+    },
+
+    "hotels": {
+      "items": "{{ JSON.stringify([0,1].map(i => { const p = $('Hotel').item.json.properties?.[i]; return p ? ({
+          name: p.name || '',
+          rating: p.overall_rating ?? null,
+          price_per_night: p.rate_per_night?.lowest || '',
+          total_price: p.total_rate?.lowest || '',
+          link: p.link || '',
+          image: p.images?.[0]?.thumbnail || ''
+        }) : null; }).filter(Boolean)) }}"
+    },
+
+    "activities": {
+      "top_results": "{{ JSON.stringify(($('Activities').item.json.results || []).slice(0,3).map(r => ({ title: r.title, url: r.url })) ) }}",
+      "images": "{{ JSON.stringify(($('Activities').item.json.images || []).slice(0,3)) }}"
+    },
+
+    "videos": {
+      "youtube_top3": "{{ JSON.stringify(($('Youtube').item.json.video_results || []).slice(0,3).map(v => ({ title: v.title, link: v.link }))) }}",
+      "shorts_top3": "{{ JSON.stringify(($('Youtube').item.json.shorts_results || []).slice(0,3).map(v => ({ title: v.title, link: v.link }))) }}"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+"Current Location": "{{$json.currentlocation  }}",
+"Destination": "{{ $json.destination }}",
+"Departure": "{{ $json.departuredate}}",
+"Return": "{{ $json.returndate }}"
+}
+
+// prompt
+// Turn the origin and destination into the ir airport codes. Make sure the departure 
+// and return dates are in the future, not the past. Here is the current date/time: {{ $now }}
